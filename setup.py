@@ -1,0 +1,24 @@
+from setuptools import setup, find_packages
+
+
+with open("readme.md", "r") as f:
+    readme = f.read()
+
+setup(
+    name="arvos",
+    version="0.1.0",
+    description="Arvos Command Line Helper",
+    long_description=readme,
+    author='Ayoub ED-DAFALI',
+    author_email='ayoub.eddafali@elastisys.com',
+    packages=find_packages('src'),
+    package_dir={'':'src'},
+    setup_requires=[],
+    install_requires=[],
+    entry_points={
+            'console_scripts': [
+                'arvos=arvos.cli:main'],
+        }
+)
+
+

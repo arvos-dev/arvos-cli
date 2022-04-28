@@ -1,6 +1,7 @@
 import subprocess
 import docker 
 import os
+from helpers import ok, error
 
 class Tracer(object):
   def __init__(self, trace_period, pom):
@@ -34,6 +35,7 @@ class Tracer(object):
         stderr=True,
         network_mode="host",
         remove=True,
+        name="tracer",
         # tty=True,
         environment=[f'TRACE_TIME=%s' % self.trace_period],
         volumes=[
@@ -45,5 +47,6 @@ class Tracer(object):
         pid_mode="container:app",
         command=command
       )
+      ok("Tracer app has started and will run for %s minutes" % self.trace_period)
     except Exception as e:
       print(e)

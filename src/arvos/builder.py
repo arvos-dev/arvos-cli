@@ -1,5 +1,6 @@
 import docker 
 import sys, os, shutil
+from arvos.helpers import ok, error
 from mako.template import Template
 
 class Builder(object):
@@ -26,19 +27,19 @@ class Builder(object):
       f.write(dockerfileTemplate.render(jarFileName=jarFileName))
 
   def buildApplicationImage(self):
-    print(f"Building Application Image with tag : %s" % self.imageTag)
+    ok(f"<h1>Building Application Image with tag : %s</h1>" % self.imageTag)
     try :
       self.appImage = self.client.images.build(
         path=self.buildContext,
         tag=self.imageTag,
         nocache=True
       )
-      print("Build Finished Successfully.")
+      ok("<h1>Build Finished Successfully.</h1>")
     except Exception as e:
       print(e)
 
   def runApplicationImage(self):
-    print(f"Running Application Image : %s" % self.imageTag)
+    ok(f"<h1>Running Application Image : %s</h1>" % self.imageTag)
     try:
       self.client.containers.get('app').remove(force=True)
     except docker.errors.NotFound:
@@ -57,14 +58,15 @@ class Builder(object):
       print(e)
 
   def runArthasAgent(self):
-    print("Running arthas agent .. ")
+    # print("Running arthas agent .. ")
     try :
       exit_code, output = self.appContainer.exec_run(
         cmd="bash -c './wait-for-it.sh -t 90 localhost:8080 && /jdk/bin/java -jar arthas-boot.jar --attach-only --select application.jar'"
       )
       if exit_code != 0 :
-        print(output.strip())
+        error("Could not run arthas agent!!")
         sys.exit(1)
+      ok("<green>You application is ready, Go hit your endpoints.</green>")
     except Exception as e:
       self.appContainer.remove(force=True, ignore_errors=True)
       print(e)
@@ -75,7 +77,7 @@ class Builder(object):
         cmd="pidof java"
       )
       if exit_code != 0 :
-        print("Could not get application PID")
+        error("Could not get application PID")
         sys.exit(1)
       return output.decode("utf-8").strip()
     except Exception as e:

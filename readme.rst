@@ -22,12 +22,18 @@ How to install
 Usage
 ------
 
-The following command will build an application image ( based on jdk 17 ) from the specified jar and run the tracer for a period of 2 minutes.
+The following command will build an application image ( based on jdk 17 ) from the specified jar, run it, and run the tracer app for a period of 2 minutes.
 
 ::
 
     $ arvos --jar target/application.json --trace-period 2 --pom pom.xml --verbose
 
+
+You can check the logs of the tracer application by running :
+
+::
+
+    $ docker logs -f tracer
 
 Supported platforms
 ---------------------

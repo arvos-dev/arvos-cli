@@ -9,10 +9,6 @@ class Tracer(object):
     self.client = docker.from_env()
     self.imageTag = "ayoubensalem/arvos-poc"
 
-
-# docker run -it --rm --net host -e TRACE_TIME=3 -v /sys/kernel/debug:/sys/kernel/debug:rw -v /lib/modules/$(uname -r):/lib/modules/$(uname -r) 
-# -v /usr/src:/usr/src --privileged --pid container:$APP ayoubensalem/arvos-poc $(docker exec -ti $APP pidof java)
-
   def traceApplication(self, targetPID):
     kernel_release = subprocess.run(["uname", "-r"], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
     volumes = [

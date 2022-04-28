@@ -1,14 +1,14 @@
 import argparse
-from builder import Builder
-from tracer import Tracer
+from arvos.builder import Builder
+from arvos.tracer import Tracer
 
 def create_parser():
   parser = argparse.ArgumentParser(
     description="""
-    Trace Java applications. 
+    Trace Java applications.
     Examples usage : 
-      $ arvos --jar target/jar --trace-period 3 --pom pom.xml --verbose $(pidof java) 
-      $ arvos --jar target/jar $(pidof java)
+      $ arvos --jar target/jar --trace-period 3 --pom pom.xml --verbose
+      $ arvos --jar target/jar
     """,
     formatter_class=argparse.RawDescriptionHelpFormatter
   )
@@ -34,3 +34,9 @@ if __name__== "__main__":
 def main():
   parser = create_parser()
   args = vars(parser.parse_args())
+  builder = Builder(args['jar'])
+  builder.buildApplicationImage()
+  builder.runApplicationImage()
+  builder.runArthasAgent()
+  tracer = Tracer(args['trace_period'], args['pom'])
+  tracer.traceApplication(builder.getApplicationPID())

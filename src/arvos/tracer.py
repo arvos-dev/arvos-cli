@@ -23,7 +23,7 @@ class Tracer(object):
       volumes.append(
         f"%s:/pom.xml" % pom_path
       )
-      command += "--pom pom.xml"
+      command += " --pom pom.xml "
 
     command += targetPID
 

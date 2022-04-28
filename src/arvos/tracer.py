@@ -46,11 +46,7 @@ class Tracer(object):
         name="tracer",
         # tty=True,
         environment=[f'TRACE_TIME=%s' % self.trace_period],
-        volumes=[
-          '/sys/kernel/debug:/sys/kernel/debug:rw',
-          f"/lib/modules/%s:/lib/modules/%s" % (kernel_release, kernel_release),
-          '/usr/src:/usr/src'
-        ],
+        volumes=volumes,
         privileged=True,
         pid_mode="container:app",
         command=command

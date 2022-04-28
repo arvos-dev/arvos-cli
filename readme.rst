@@ -26,7 +26,7 @@ The following command will build an application image ( based on jdk 17 ) from t
 
 ::
 
-    $ arvos --jar target/application.json --trace-period 2 --pom pom.xml --verbose
+    $ arvos --jar target/application.jar --trace-period 2 --pom pom.xml --verbose
 
 
 You can check the logs of the tracer application by running :

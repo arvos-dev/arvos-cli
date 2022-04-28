@@ -1,7 +1,7 @@
 import subprocess
 import docker 
 import os
-from arvos.helpers import ok
+from arvos.helpers import ok, title
 
 class Tracer(object):
   def __init__(self, trace_period, pom):
@@ -26,6 +26,14 @@ class Tracer(object):
       command += " --pom pom.xml "
 
     command += targetPID
+    title("Running the Tracer Application  for %s minutes" % self.trace_period)
+    print("You can check the tracer logs by running : ", end="")
+    ok("docker logs -f tracer")
+
+    try:
+      self.client.containers.get('tracer').remove(force=True)
+    except docker.errors.NotFound:
+      pass
 
     try:
       self.appContainer = self.client.containers.run(
@@ -47,6 +55,5 @@ class Tracer(object):
         pid_mode="container:app",
         command=command
       )
-      ok("Tracer app has started and will run for %s minutes" % self.trace_period)
     except Exception as e:
       print(e)

@@ -51,3 +51,6 @@ def error(text):
 
 def ok(text): 
     print(prettify("<green>{}</green>".format(text)))
+
+def title(text):
+    print(prettify("<title>{}</title>").format(text))

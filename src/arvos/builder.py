@@ -1,6 +1,6 @@
 import docker 
 import sys, os, shutil
-from arvos.helpers import ok, error
+from arvos.helpers import ok, error, title
 from mako.template import Template
 
 class Builder(object):
@@ -27,19 +27,19 @@ class Builder(object):
       f.write(dockerfileTemplate.render(jarFileName=jarFileName))
 
   def buildApplicationImage(self):
-    ok(f"<h1>Building Application Image with tag : %s</h1>" % self.imageTag)
+    title(f"Building the Application Image with tag %s" % self.imageTag)
     try :
       self.appImage = self.client.images.build(
         path=self.buildContext,
         tag=self.imageTag,
         nocache=True
       )
-      ok("<h1>Build Finished Successfully.</h1>")
+      ok("Build Finished Successfully")
     except Exception as e:
       print(e)
 
   def runApplicationImage(self):
-    ok(f"<h1>Running Application Image : %s</h1>" % self.imageTag)
+    title(f"Running the Application Image %s" % self.imageTag)
     try:
       self.client.containers.get('app').remove(force=True)
     except docker.errors.NotFound:
@@ -66,7 +66,7 @@ class Builder(object):
       if exit_code != 0 :
         error("Could not run arthas agent!!")
         sys.exit(1)
-      ok("<green>You application is ready, Go hit your endpoints.</green>")
+      ok("You application is ready, Go hit your endpoints.")
     except Exception as e:
       self.appContainer.remove(force=True, ignore_errors=True)
       print(e)

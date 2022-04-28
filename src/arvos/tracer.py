@@ -1,7 +1,7 @@
 import subprocess
 import docker 
 import os
-from helpers import ok, error
+from arvos.helpers import ok
 
 class Tracer(object):
   def __init__(self, trace_period, pom):

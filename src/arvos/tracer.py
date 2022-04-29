@@ -1,14 +1,17 @@
 import subprocess
 import docker 
-import os
+import os, shutil
 from arvos.helpers import ok, title
+from pathlib import Path
 
 class Tracer(object):
-  def __init__(self, trace_period, pom):
+  def __init__(self, trace_period, pom, save_report):
     self.trace_period = trace_period
     self.pom = pom 
     self.client = docker.from_env()
     self.imageTag = "ayoubensalem/arvos-poc"
+    self.save_report = save_report
+    self.report_folder = "%s/arvos-reports" % Path.home()
 
   def traceApplication(self, targetPID):
     kernel_release = subprocess.run(["uname", "-r"], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
@@ -25,10 +28,23 @@ class Tracer(object):
       )
       command += " --pom /pom.xml "
 
+
+    shutil.rmtree(self.report_folder, ignore_errors=True)
+    os.mkdir(self.report_folder)
+
+    if self.save_report:
+      volumes.append(
+        f"%s:/stacks" % self.report_folder
+      )
+      command += " --save-report "
+
     command += targetPID
     title("Running the Tracer Application  for %s minutes" % self.trace_period)
-    print("You can check the tracer logs by running : ", end="")
+    print("You can check the tracer logs in another terminal by running : ", end="")
     ok("docker logs -f tracer")
+
+    if self.save_report:
+      title("Arvos report will be saved under %s" % self.report_folder)
 
     try:
       self.client.containers.get('tracer').remove(force=True)
@@ -38,13 +54,10 @@ class Tracer(object):
     try:
       self.appContainer = self.client.containers.run(
         image=self.imageTag,
-        stdout=True,
         detach=False,
-        stderr=True,
         network_mode="host",
         remove=True,
         name="tracer",
-        # tty=True,
         environment=[f'TRACE_TIME=%s' % self.trace_period],
         volumes=volumes,
         privileged=True,

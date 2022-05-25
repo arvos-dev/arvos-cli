@@ -47,7 +47,7 @@ def debug(text):
     print(prettify("<green>[DEBUG] : \n{}</green>".format(text)))
 
 def error(text): 
-    print(prettify("<red>[ERROR] : \n{}</red>".format(text)))
+    print(prettify("<red>[ERROR] : {}</red>".format(text)))
 
 def ok(text): 
     print(prettify("<green>{}</green>".format(text)))

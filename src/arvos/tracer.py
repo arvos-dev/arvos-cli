@@ -1,7 +1,8 @@
 import subprocess
+from sys import stderr
 import docker 
 import os, shutil
-from arvos.helpers import ok, title
+from arvos.helpers import ok, title, error
 from pathlib import Path
 
 class Tracer(object):
@@ -55,6 +56,8 @@ class Tracer(object):
       self.appContainer = self.client.containers.run(
         image=self.imageTag,
         detach=False,
+        stdout=False,
+        stderr=True,
         network_mode="host",
         remove=True,
         name="tracer",
@@ -65,5 +68,7 @@ class Tracer(object):
         pid_mode="container:app",
         command=command
       )
+    except docker.errors.ContainerError as c:
+      error("Vulnerable symbols have been found!")
     except Exception as e:
       print(e)

@@ -1,5 +1,6 @@
 import subprocess
 from sys import stderr
+import sys
 import docker 
 import os, shutil
 from arvos.helpers import ok, title, error
@@ -40,9 +41,9 @@ class Tracer(object):
       command += " --save-report "
 
     command += targetPID
-    title("Running the Tracer Application  for %s minutes" % self.trace_period)
-    print("You can check the tracer logs in another terminal by running : ", end="")
-    ok("docker logs -f tracer")
+    title("Running ARVOS Tracer Application for %s minutes" % self.trace_period)
+    # print("You can check the tracer logs in another terminal by running : ", end="")
+    # ok("docker logs -f tracer")
 
     if self.save_report:
       title("Arvos report will be saved under %s" % self.report_folder)
@@ -55,11 +56,11 @@ class Tracer(object):
     try:
       self.appContainer = self.client.containers.run(
         image=self.imageTag,
-        detach=False,
-        stdout=False,
+        detach=True,
+        stdout=True,
         stderr=True,
         network_mode="host",
-        remove=True,
+        remove=False,
         name="tracer",
         mem_limit="1g",
         environment=[f'TRACE_TIME=%s' % self.trace_period],
@@ -71,4 +72,12 @@ class Tracer(object):
     except docker.errors.ContainerError as c:
       error("Vulnerable symbols have been found!")
     except Exception as e:
+      print(e)
+
+  def waitUntilFinish(self):
+    try:
+      output = self.appContainer.wait()
+      if output["StatusCode"] != 0 :
+        error("Vulnerable symbols have been found!")
+    except Exception as e :
       print(e)

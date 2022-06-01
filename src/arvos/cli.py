@@ -8,13 +8,12 @@ def create_parser():
     description="""
     Trace Java applications.
     Examples usage : 
-      $ arvos --jar target/jar --trace-period 3 --pom pom.xml --verbose
-      $ arvos --jar target/jar --save-report
+      $ arvos --trace-period 3 --pom pom.xml --verbose
+      $ arvos --save-report
     """,
     formatter_class=argparse.RawDescriptionHelpFormatter
   )
 
-  parser.add_argument("--jar", help="Path to .jar file", type=str, required=True)
   parser.add_argument("--pom", "--only-versions-from-pom", help="Path to pom.xml file", type=str, required=False)
   parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default="2", required=False)
   parser.add_argument("--save-report", help="Save report as pdf", action="store_true")
@@ -26,19 +25,27 @@ def create_parser():
 if __name__== "__main__":
   parser = create_parser()
   args = vars(parser.parse_args())
-  builder = Builder(args['jar'])
-  builder.buildApplicationImage()
-  builder.runApplicationImage()
+  builder = Builder()
+  builder.buildTestImage()
+  builder.runUnitTests()
   builder.runArthasAgent()
+  testApplicationPID = builder.getTestApplicationPID()
+  builder.pauseUnitTests()
   tracer = Tracer(args['trace_period'], args['pom'])
-  tracer.traceApplication(builder.getApplicationPID())
+  tracer.traceApplication(testApplicationPID)
+  builder.resumeUnitTests()
+  tracer.waitUntilFinish()
 
 def main():
   parser = create_parser()
   args = vars(parser.parse_args())
-  builder = Builder(args['jar'])
-  builder.buildApplicationImage()
-  builder.runApplicationImage()
+  builder = Builder()
+  builder.buildTestImage()
+  builder.runUnitTests()
   builder.runArthasAgent()
+  testApplicationPID = builder.getTestApplicationPID()
+  builder.pauseUnitTests()
   tracer = Tracer(args['trace_period'], args['pom'], args['save_report'])
-  tracer.traceApplication(builder.getApplicationPID())
+  tracer.traceApplication(testApplicationPID)
+  builder.resumeUnitTests()
+  tracer.waitUntilFinish()

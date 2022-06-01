@@ -43,7 +43,7 @@ class Builder(object):
         network_mode="host"
       )
     except Exception as e:
-      self.appContainer.remove(force=True, ignore_errors=True)
+      self.appContainer.remove(force=True)
       print(e)
 
   def runArthasAgent(self):
@@ -57,7 +57,7 @@ class Builder(object):
         sys.exit(1)
       # ok("You application is ready, Go hit your endpoints.")
     except Exception as e:
-      self.appContainer.remove(force=True, ignore_errors=True)
+      self.appContainer.remove(force=True)
       print(e)
 
   def getTestApplicationPID(self):

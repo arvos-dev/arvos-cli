@@ -59,7 +59,6 @@ class Tracer(object):
         stdout=False,
         stderr=True,
         network_mode="host",
-        remove=True,
         name="tracer",
         mem_limit="1g",
         environment=[f'TRACE_TIME=%s' % self.trace_period],

@@ -18,6 +18,7 @@ def create_parser():
   parser.add_argument("--pom", "--only-versions-from-pom", help="Path to pom.xml file", type=str, required=False)
   parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default="2", required=False)
   parser.add_argument("--save-report", help="Save report as pdf", action="store_true")
+  parser.add_argument("--summary", help="Show summary instead of full output", action="store_true")
   parser.add_argument("-v", "--verbose", action="store_true", help="verbose mode: print the BPF program (for debugging purposes)")
 
   return parser
@@ -40,5 +41,5 @@ def main():
   builder.buildApplicationImage()
   builder.runApplicationImage()
   builder.runArthasAgent()
-  tracer = Tracer(args['trace_period'], args['pom'], args['save_report'])
+  tracer = Tracer(args['trace_period'], args['pom'], args['save_report'], args['summary'])
   tracer.traceApplication(builder.getApplicationPID())

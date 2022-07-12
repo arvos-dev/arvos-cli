@@ -6,12 +6,13 @@ from arvos.helpers import ok, title, error
 from pathlib import Path
 
 class Tracer(object):
-  def __init__(self, trace_period, pom, save_report):
+  def __init__(self, trace_period, pom, save_report, summary):
     self.trace_period = trace_period
     self.pom = pom 
     self.client = docker.from_env()
     self.imageTag = "ayoubensalem/arvos-poc"
     self.save_report = save_report
+    self.summary = summary
     self.report_folder = "%s/arvos-reports" % Path.home()
 
   def traceApplication(self, targetPID):
@@ -38,6 +39,9 @@ class Tracer(object):
         f"%s:/stacks" % self.report_folder
       )
       command += " --save-report "
+
+    if not self.summary :
+      command += " --show-all "
 
     command += targetPID
     title("Running the Tracer Application  for %s minutes" % self.trace_period)

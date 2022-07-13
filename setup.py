@@ -6,7 +6,7 @@ with open("readme.rst", "r") as f:
 
 setup(
     name="arvos",
-    version="3.0.1",
+    version="3.0.2",
     description="Arvos Command Line Helper",
     long_description=readme,
     author='Ayoub ED-DAFALI',
@@ -14,7 +14,7 @@ setup(
     packages=find_packages('src'),
     package_dir={'':'src'},
     setup_requires=[],
-    install_requires=["docker", "mako"],
+    install_requires=["docker", "mako", "wget"],
     entry_points={
         'console_scripts': ['arvos=arvos.cli:main'],
     }

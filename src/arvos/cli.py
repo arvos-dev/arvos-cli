@@ -13,6 +13,7 @@ def create_parser():
     description="""
     Trace Java applications.
     Examples usage : 
+      $ arvos --demo --save-report
       $ arvos --jar target/jar --trace-period 3 --pom pom.xml --verbose
       $ arvos --jar target/jar --save-report
     """,

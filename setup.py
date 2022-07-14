@@ -6,8 +6,8 @@ with open("readme.rst", "r") as f:
 
 setup(
     name="arvos",
-    version="3.0.2",
-    description="Arvos Command Line Helper",
+    version="3.0.3",
+    description="Arvos Command Line Utility",
     long_description=readme,
     author='Ayoub ED-DAFALI',
     author_email='ayoub.eddafali@elastisys.com',

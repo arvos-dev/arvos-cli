@@ -1,8 +1,8 @@
 import argparse
-import wget, os, shutil
+import wget, os, shutil, sys
 from arvos.builder import Builder
 from arvos.tracer import Tracer
-from arvos.helpers import title
+from arvos.helpers import title, error
 
 
 DEMO_APP_JAR_LINK = "https://github.com/ayoubeddafali/spring-vulnerable-app/releases/download/0.0.1-snapshot/java-app-0.0.1-SNAPSHOT.jar"
@@ -48,6 +48,10 @@ if __name__== "__main__":
     download_demo_files()
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
+  elif not args['jar']:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+    
   builder = Builder(args['jar'])
   builder.buildApplicationImage()
   builder.runApplicationImage()
@@ -62,6 +66,10 @@ def main():
     download_demo_files()
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
+  elif not args['jar']:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+
   builder = Builder(args['jar'])
   builder.buildApplicationImage()
   builder.runApplicationImage()

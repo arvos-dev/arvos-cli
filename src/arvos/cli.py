@@ -57,7 +57,7 @@ if __name__== "__main__":
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
     args['trace_period'] = 1
-    args['save_report'] = False
+    args['save_report'] = True
     args['summary'] = False
     
   builder = Builder(args['jar'])
@@ -80,7 +80,7 @@ def main():
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
     args['trace_period'] = 1
-    args['save_report'] = False
+    args['save_report'] = True
     args['summary'] = False
 
   builder = Builder(args['jar'])

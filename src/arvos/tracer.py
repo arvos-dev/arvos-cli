@@ -44,7 +44,7 @@ class Tracer(object):
       command += " --show-all "
 
     command += targetPID
-    title("Running the Tracer Application  for %s minutes" % self.trace_period)
+    title("Running the Tracer Application  for %s minute(s)" % self.trace_period)
     print("You can check the tracer logs in another terminal by running : ", end="")
     ok("docker logs -f tracer")
 

@@ -26,13 +26,13 @@ The following command will build an application image ( based on jdk 17 ) from t
 
 ::
 
-    $ arvos --jar target/application.jar --trace-period 2 --pom pom.xml
+    $ arvos scan --jar target/application.jar --trace-period 2 --pom pom.xml
 
 Or  ( This will generate a .pdf report of the found vunlerable )
 
 :: 
 
-    $ arvos --jar target/java-app-0.0.1-SNAPSHOT.jar --trace-period 2 --save-report
+    $ arvos scan --jar target/java-app-0.0.1-SNAPSHOT.jar --trace-period 2 --save-report
 
 
 If you do not have a ready Java 17 based application, you can use the following sample application: https://github.com/ayoubeddafali/spring-vulnerable-app. 

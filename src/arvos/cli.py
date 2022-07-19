@@ -13,20 +13,24 @@ def create_parser():
     description="""
     Trace Java applications.
     Examples usage : 
-      $ arvos --demo --save-report
-      $ arvos --jar target/jar --trace-period 3 --pom pom.xml --verbose
-      $ arvos --jar target/jar --save-report
+      $ arvos --demo
+      $ arvos scan --jar target/jar  --pom pom.xml
+      $ arvos scan --jar target/jar --save-report --trace-period 3
     """,
     formatter_class=argparse.RawDescriptionHelpFormatter
   )
 
-  parser.add_argument("--jar", help="Path to .jar file", type=str, required=False)
-  parser.add_argument("--pom", "--only-versions-from-pom", help="Path to pom.xml file", type=str, required=False)
-  parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default="2", required=False)
-  parser.add_argument("--save-report", help="Save report as pdf", action="store_true")
-  parser.add_argument("--summary", help="Show summary instead of full output", action="store_true")
-  parser.add_argument("--demo", help="Run arvos against a demo application", action="store_true")
-  parser.add_argument("-v", "--verbose", action="store_true", help="verbose mode: print the BPF program (for debugging purposes)")
+  parser.add_argument("--demo", help="Run arvos against a demo application ( https://github.com/ayoubeddafali/spring-vulnerable-app ) ", action="store_true", default=False)
+
+  sub_parsers = parser.add_subparsers()
+  # create the parser for the scan sub-command
+  scan_parser = sub_parsers.add_parser('scan', help='Scan a custom java application')
+
+  scan_parser.add_argument("--jar", help="Path to .jar file", type=str, required=True)
+  scan_parser.add_argument("--pom", help="Path to pom.xml file", type=str, required=False)
+  scan_parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default="2", required=False)
+  scan_parser.add_argument("--save-report", help="Save report as a pdf file", action="store_true", default=False)
+  scan_parser.add_argument("--summary", help="Show summary instead of full report", action="store_true", default=False)
 
   return parser
 
@@ -44,13 +48,17 @@ def download_demo_files():
 if __name__== "__main__":
   parser = create_parser()
   args = vars(parser.parse_args())
+  if not args['demo'] and 'jar' not in args:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+
   if args['demo']:
     download_demo_files()
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
-  elif not args['jar']:
-    parser.print_help(sys.stderr)
-    sys.exit(1)
+    args['trace_period'] = 1
+    args['save_report'] = False
+    args['summary'] = False
     
   builder = Builder(args['jar'])
   builder.buildApplicationImage()
@@ -62,13 +70,18 @@ if __name__== "__main__":
 def main():
   parser = create_parser()
   args = vars(parser.parse_args())
+
+  if not args['demo'] and 'jar' not in args:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+
   if args['demo']:
     download_demo_files()
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
-  elif not args['jar']:
-    parser.print_help(sys.stderr)
-    sys.exit(1)
+    args['trace_period'] = 1
+    args['save_report'] = False
+    args['summary'] = False
 
   builder = Builder(args['jar'])
   builder.buildApplicationImage()

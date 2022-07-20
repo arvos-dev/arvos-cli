@@ -6,7 +6,7 @@ from arvos.helpers import ok, title, error
 from pathlib import Path
 
 class Tracer(object):
-  def __init__(self, trace_period, pom, save_report, summary):
+  def __init__(self, trace_period, pom, save_report, summary, detach):
     self.trace_period = trace_period
     self.pom = pom 
     self.client = docker.from_env()
@@ -14,6 +14,7 @@ class Tracer(object):
     self.save_report = save_report
     self.summary = summary
     self.report_folder = "%s/arvos-reports" % Path.home()
+    self.detach = detach
 
   def traceApplication(self, targetPID):
     kernel_release = subprocess.run(["uname", "-r"], stdout=subprocess.PIPE).stdout.decode("utf-8").strip()
@@ -44,9 +45,8 @@ class Tracer(object):
       command += " --show-all "
 
     command += targetPID
-    title("Running the Tracer Application  for %s minute(s)" % self.trace_period)
-    print("You can check the tracer logs in another terminal by running : ", end="")
-    ok("docker logs -f tracer")
+
+    title("Running the Tracer Application  for %s minute(s) .." % self.trace_period)
 
     if self.save_report:
       title("Arvos report will be saved under %s" % self.report_folder)
@@ -59,7 +59,7 @@ class Tracer(object):
     try:
       self.appContainer = self.client.containers.run(
         image=self.imageTag,
-        detach=False,
+        detach=self.detach,
         stdout=False,
         stderr=True,
         network_mode="host",
@@ -71,6 +71,8 @@ class Tracer(object):
         pid_mode="container:app",
         command=command
       )
+      print("You can check the tracer logs by running : ", end="")
+      ok("docker logs -f tracer")
     except docker.errors.ContainerError as c:
       error("Vulnerable symbols have been found!")
     except Exception as e:

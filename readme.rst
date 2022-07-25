@@ -23,8 +23,6 @@ How to install
     $ pip install arvos
     $ arvos --help
 
-[![asciicast](https://asciinema.org/a/CZ8c7aBzIZ4Y1sIRPrlA0xq5y.png)](https://asciinema.org/a/CZ8c7aBzIZ4Y1sIRPrlA0xq5y)
-
 Usage
 ------
 

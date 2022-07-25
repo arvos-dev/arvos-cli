@@ -4,8 +4,9 @@ from arvos.helpers import ok, error, title
 from mako.template import Template
 
 class Builder(object):
-  def __init__(self, artifact):
+  def __init__(self, artifact, java_version):
     self.artifact = artifact
+    self.java_version = java_version
     self.client = docker.from_env()
     self.buildContext = "/tmp/arvos-app/"
     self.imageTag = "arvos:app"
@@ -21,10 +22,10 @@ class Builder(object):
     
     shutil.copyfile(jarFileAbsolutePath, self.buildContext  + jarFileName)
 
-    dockerfileTemplate = Template("""FROM ayoubensalem/jdk-docker-jstack\nCOPY ${jarFileName} ./application.jar""")
+    dockerfileTemplate = Template("""FROM ayoubensalem/jdk${version}-arvos \nCOPY ${jarFileName} ./application.jar""")
 
     with open(f"%s/Dockerfile" % self.buildContext, "w") as f:
-      f.write(dockerfileTemplate.render(jarFileName=jarFileName))
+      f.write(dockerfileTemplate.render(jarFileName=jarFileName, version=self.java_version))
 
   def buildApplicationImage(self):
     title(f"Building the Application Image with tag %s" % self.imageTag)
@@ -61,7 +62,7 @@ class Builder(object):
     # print("Running arthas agent .. ")
     try :
       exit_code, output = self.appContainer.exec_run(
-        cmd="bash -c './wait-for-it.sh -t 90 localhost:8080 && /jdk/bin/java -jar arthas-boot.jar --attach-only --select application.jar'"
+        cmd="bash -c './wait-for-it.sh -t 90 localhost:8080 && /opt/jdk/bin/java -jar arthas-boot.jar --attach-only --select application.jar'"
       )
       if exit_code != 0 :
         error("Could not run arthas agent!!")

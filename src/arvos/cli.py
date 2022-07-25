@@ -16,7 +16,7 @@ def create_parser():
       $ arvos --demo
       $ arvos scan --help
       $ arvos scan --jar target/jar  --pom pom.xml
-      $ arvos scan --jar target/jar --save-report --trace-period 3 --detach
+      $ arvos scan --java 17 --jar target/jar --save-report --trace-period 3 --detach
     """,
     formatter_class=argparse.RawDescriptionHelpFormatter
   )
@@ -27,6 +27,7 @@ def create_parser():
   # create the parser for the scan sub-command
   scan_parser = sub_parsers.add_parser('scan', help='Scan a custom java application')
 
+  scan_parser.add_argument('--java', default='17', const='17', nargs='?', choices=['17', '18'], help='Java version  (default: %(default)s)')
   scan_parser.add_argument("--jar", help="Path to .jar file", type=str, required=True)
   scan_parser.add_argument("--pom", help="Path to pom.xml file", type=str, required=False)
   scan_parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default="2", required=False)
@@ -58,12 +59,13 @@ if __name__== "__main__":
     download_demo_files()
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
+    args['java'] = '17'
     args['trace_period'] = 1
     args['save_report'] = True
     args['summary'] = False
     args['detach'] = False
     
-  builder = Builder(args['jar'])
+  builder = Builder(args['jar'], args['java'])
   builder.buildApplicationImage()
   builder.runApplicationImage()
   builder.runArthasAgent()
@@ -73,7 +75,6 @@ if __name__== "__main__":
 def main():
   parser = create_parser()
   args = vars(parser.parse_args())
-
   if not args['demo'] and 'jar' not in args:
     parser.print_help(sys.stderr)
     sys.exit(1)
@@ -82,12 +83,13 @@ def main():
     download_demo_files()
     args['jar'] = '/tmp/arvos-demo/demo.jar'
     args['pom'] = '/tmp/arvos-demo/pom.xml'
+    args['java'] = '17'
     args['trace_period'] = 1
     args['save_report'] = True
     args['summary'] = False
     args['detach'] = False
 
-  builder = Builder(args['jar'])
+  builder = Builder(args['jar'], args['java'])
   builder.buildApplicationImage()
   builder.runApplicationImage()
   builder.runArthasAgent()

@@ -46,7 +46,9 @@ Or  ( This will generate a .pdf report of the found vunlerablities )
 
 Output 
 ------
-.. image:: arvos.png
+.. image:: output.png
+
+.. image:: output_summary.png
 
 Supported platforms
 ---------------------

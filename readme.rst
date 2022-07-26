@@ -44,6 +44,9 @@ Or  ( This will generate a .pdf report of the found vunlerablities )
 
     $ arvos scan --java 18 --jar target/java-app-0.0.1-SNAPSHOT.jar --trace-period 2 --save-report
 
+Output 
+------
+.. image:: arvos.png
 
 Supported platforms
 ---------------------

@@ -16,21 +16,23 @@ def create_parser():
       $ arvos --demo
       $ arvos scan --help
       $ arvos scan --jar target/jar  --pom pom.xml
-      $ arvos scan --java 17 --jar target/jar --save-report --trace-period 3 --detach
+      $ arvos scan --java 17 --jar target/jar --pom pom.xml --save-report  --detach
+      $ arvos scan --java 17 --jar target/jar --save-report --trace-period 3 
     """,
     formatter_class=argparse.RawDescriptionHelpFormatter
   )
 
   parser.add_argument("--demo", help="Run arvos against a demo application ( https://github.com/ayoubeddafali/spring-vulnerable-app ) ", action="store_true", default=False)
+  parser.add_argument("--stop", help="Stop arvos scanning", action="store_true", default=False)
 
-  sub_parsers = parser.add_subparsers(help="scan --help")
+  sub_parsers = parser.add_subparsers()
   # create the parser for the scan sub-command
   scan_parser = sub_parsers.add_parser('scan', help='Scan a custom java application')
 
   scan_parser.add_argument('--java', default='17', const='17', nargs='?', choices=['17', '18'], help='Java version  (default: %(default)s)')
   scan_parser.add_argument("--jar", help="Path to .jar file", type=str, required=True)
   scan_parser.add_argument("--pom", help="Path to pom.xml file", type=str, required=False)
-  scan_parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default="2", required=False)
+  scan_parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default=str(sys.maxsize), required=False)
   scan_parser.add_argument("--save-report", help="Save report as a pdf file", action="store_true", default=False)
   scan_parser.add_argument("--summary", help="Show summary instead of full report", action="store_true", default=False)
   scan_parser.add_argument("--detach", "-d", help="Run tracer in the background", action="store_true", default=False)
@@ -51,7 +53,7 @@ def download_demo_files():
 if __name__== "__main__":
   parser = create_parser()
   args = vars(parser.parse_args())
-  if not args['demo'] and 'jar' not in args:
+  if not args['demo'] and not args['stop'] and 'jar' not in args:
     parser.print_help(sys.stderr)
     sys.exit(1)
 
@@ -64,7 +66,11 @@ if __name__== "__main__":
     args['save_report'] = True
     args['summary'] = False
     args['detach'] = False
-    
+
+  if args['stop']:
+    Tracer.stopTracer()
+    sys.exit(0)  
+  
   builder = Builder(args['jar'], args['java'])
   builder.buildApplicationImage()
   builder.runApplicationImage()
@@ -75,7 +81,7 @@ if __name__== "__main__":
 def main():
   parser = create_parser()
   args = vars(parser.parse_args())
-  if not args['demo'] and 'jar' not in args:
+  if not args['demo'] and not args['stop'] and 'jar' not in args:
     parser.print_help(sys.stderr)
     sys.exit(1)
 
@@ -88,6 +94,10 @@ def main():
     args['save_report'] = True
     args['summary'] = False
     args['detach'] = False
+
+  if args['stop']:
+    Tracer.stopTracer()
+    sys.exit(0)  
 
   builder = Builder(args['jar'], args['java'])
   builder.buildApplicationImage()

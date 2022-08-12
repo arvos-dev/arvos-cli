@@ -77,3 +77,13 @@ class Tracer(object):
       error("Vulnerable symbols have been found!")
     except Exception as e:
       print(e)
+
+  @staticmethod
+  def stopTracer():
+    try:
+      client = docker.from_env()
+      client.containers.get('tracer').kill(signal="SIGTERM")
+    except docker.errors.NotFound:
+      pass
+    except docker.errors.APIError as e:
+      print(e)

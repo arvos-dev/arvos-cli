@@ -1,5 +1,5 @@
 import subprocess
-from sys import stderr
+from sys import stderr, maxsize
 import docker 
 import os, shutil
 from arvos.helpers import ok, title, error
@@ -46,7 +46,10 @@ class Tracer(object):
 
     command += targetPID
 
-    title("Running the Tracer Application  for %s minute(s) .." % self.trace_period)
+    if self.trace_period ==  str(maxsize):
+      title("Running the Tracer Application ...")
+    else:
+      title("Running the Tracer Application for %s minute(s) .." % self.trace_period)
 
     if self.save_report:
       title("Arvos report will be saved under %s" % self.report_folder)
@@ -71,10 +74,12 @@ class Tracer(object):
         pid_mode="container:app",
         command=command
       )
-      print("You can check the tracer logs by running : ", end="")
+      print("You can follow the tracer logs by running : ", end="")
       ok("docker logs -f tracer")
     except docker.errors.ContainerError as c:
       error("Vulnerable symbols have been found!")
+      print("You can follow the tracer logs by running : ", end="")
+      ok("docker logs -f tracer")
     except Exception as e:
       print(e)
 

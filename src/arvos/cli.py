@@ -32,10 +32,10 @@ def create_parser():
   scan_parser.add_argument('--java', default='17', const='17', nargs='?', choices=['17', '18'], help='Java version  (default: %(default)s)')
   scan_parser.add_argument("--jar", help="Path to .jar file", type=str, required=True)
   scan_parser.add_argument("--pom", help="Path to pom.xml file", type=str, required=False)
-  scan_parser.add_argument("--trace-period", help="Tracing period in minutes", type=str, default=str(sys.maxsize), required=False)
-  scan_parser.add_argument("--save-report", help="Save report as a pdf file", action="store_true", default=False)
-  scan_parser.add_argument("--summary", help="Show summary instead of full report", action="store_true", default=False)
-  scan_parser.add_argument("--detach", "-d", help="Run tracer in the background", action="store_true", default=False)
+  scan_parser.add_argument("--trace-period", help="Tracing period in minutes (default: Infinite)", type=str, default=str(sys.maxsize), required=False)
+  scan_parser.add_argument("--save-report", help="Save report as a pdf file (default: False)", action="store_true", default=False)
+  scan_parser.add_argument("--summary", help="Show summary instead of full report (default: False)", action="store_true", default=False)
+  scan_parser.add_argument("--detach", "-d", help="Run tracer in the background (default: False)", action="store_true", default=False)
 
   return parser
 

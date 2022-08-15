@@ -32,17 +32,14 @@ Demo usage :
 
     $ arvos --demo
 
-The following command will build an application image ( based on jdk 17 ) from the specified jar, run it, and run the tracer app for a period of 2 minutes.
+The following command will build a Java application image ( based on jdk 17 ) from the specified jar, run it, and start the tracer app for a period of 2 minutes.
+
 
 ::
 
-    $ arvos scan --java 17 --jar target/application.jar --trace-period 2 --pom pom.xml
+    $ arvos scan --java 17 --jar target/application.jar --trace-period 2 --save-report --pom pom.xml
 
-Or  ( This will generate a .pdf report of the found vunlerablities )
-
-:: 
-
-    $ arvos scan --java 18 --jar target/java-app-0.0.1-SNAPSHOT.jar --trace-period 2 --save-report
+A .pdf report will be saved under your $HOME/arvos-reports folder. 
 
 Output 
 ------

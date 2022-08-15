@@ -46,9 +46,9 @@ Or  ( This will generate a .pdf report of the found vunlerablities )
 
 Output 
 ------
-.. image:: output.png
 
-.. image:: output_summary.png
+.. image:: demo.svg
+   :target: https://asciinema.org/a/RtSwPXdjnuEPyEHhcyZegaLie
 
 Supported platforms
 ---------------------

@@ -45,7 +45,7 @@ Output
 ------
 
 .. image:: demo.svg
-   :target: https://asciinema.org/a/RtSwPXdjnuEPyEHhcyZegaLie
+   :target: https://asciinema.org/a/Iffg5VmOYPTcnDz1kaebEH7bk
 
 Supported platforms
 ---------------------

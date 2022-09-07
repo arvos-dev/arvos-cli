@@ -16,8 +16,8 @@ def create_parser():
       $ arvos --demo
       $ arvos scan --help
       $ arvos scan --jar target/jar  --pom pom.xml
-      $ arvos scan --java 17 --jar target/jar --pom pom.xml --save-report  --detach
-      $ arvos scan --java 17 --jar target/jar --save-report --trace-period 3 
+      $ arvos scan --java 17 --jar target/jar --pom pom.xml --save-report pdf --detach
+      $ arvos scan --java 17 --jar target/jar --save-report csv --trace-period 3 
     """,
     formatter_class=argparse.RawDescriptionHelpFormatter
   )
@@ -33,7 +33,7 @@ def create_parser():
   scan_parser.add_argument("--jar", help="Path to .jar file", type=str, required=True)
   scan_parser.add_argument("--pom", help="Path to pom.xml file", type=str, required=False)
   scan_parser.add_argument("--trace-period", help="Tracing period in minutes (default: Infinite)", type=str, default=str(sys.maxsize), required=False)
-  scan_parser.add_argument("--save-report", help="Save report as a pdf file (default: False)", action="store_true", default=False)
+  scan_parser.add_argument('--save-report', default=False, const=False, nargs='?', choices=['pdf', 'csv'], help='Save report as pdf or csv')
   scan_parser.add_argument("--summary", help="Show summary instead of full report (default: False)", action="store_true", default=False)
   scan_parser.add_argument("--detach", "-d", help="Run tracer in the background (default: False)", action="store_true", default=False)
 

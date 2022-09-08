@@ -37,7 +37,7 @@ The following command will build a Java application image ( based on jdk 17 ) fr
 
 ::
 
-    $ arvos scan --java 17 --jar target/application.jar --trace-period 2 --save-report --pom pom.xml
+    $ arvos scan --java 17 --jar target/application.jar --trace-period 2 --save-report pdf --pom pom.xml
 
 A .pdf report will be saved under your $HOME/arvos-reports folder. 
 

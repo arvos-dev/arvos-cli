@@ -10,7 +10,7 @@ class Tracer(object):
     self.trace_period = trace_period
     self.pom = pom 
     self.client = docker.from_env()
-    self.imageTag = "ayoubensalem/arvos-poc"
+    self.imageTag = "ayoubensalem/arvos-poc:3.0.11"
     self.save_report = save_report
     self.summary = summary
     self.report_folder = "%s/arvos-reports" % Path.home()
@@ -39,7 +39,7 @@ class Tracer(object):
       volumes.append(
         f"%s:/stacks" % self.report_folder
       )
-      command += " --save-report "
+      command += " --save-report " + self.save_report
 
     if not self.summary :
       command += " --show-all "

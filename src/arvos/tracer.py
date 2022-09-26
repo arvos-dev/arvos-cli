@@ -10,7 +10,7 @@ class Tracer(object):
     self.trace_period = trace_period
     self.pom = pom 
     self.client = docker.from_env()
-    self.imageTag = "ayoubensalem/arvos-poc:3.0.11"
+    self.imageTag = "ayoubensalem/arvos-poc:3.0.12"
     self.save_report = save_report
     self.summary = summary
     self.report_folder = "%s/arvos-reports" % Path.home()
@@ -68,6 +68,7 @@ class Tracer(object):
         network_mode="host",
         name="tracer",
         mem_limit="1g",
+        shm_size="512000000",
         environment=[f'TRACE_TIME=%s' % self.trace_period],
         volumes=volumes,
         privileged=True,

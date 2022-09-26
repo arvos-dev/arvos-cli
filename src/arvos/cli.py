@@ -63,7 +63,7 @@ if __name__== "__main__":
     args['pom'] = '/tmp/arvos-demo/pom.xml'
     args['java'] = '17'
     args['trace_period'] = 1
-    args['save_report'] = True
+    args['save_report'] = 'pdf'
     args['summary'] = False
     args['detach'] = False
 
@@ -91,7 +91,7 @@ def main():
     args['pom'] = '/tmp/arvos-demo/pom.xml'
     args['java'] = '17'
     args['trace_period'] = 1
-    args['save_report'] = True
+    args['save_report'] = 'pdf'
     args['summary'] = False
     args['detach'] = False
 
